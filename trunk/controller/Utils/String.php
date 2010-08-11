@@ -228,4 +228,27 @@ class Oos_Utils_String extends Oos_BaseClass
 		
 		return $time;
 	}
+	
+	/**
+	 * Converting an array into XML attributes
+	 * 
+	 * @version	1.0
+	 * @since	0.1.4
+ 	 * @author	Antoine Berranger <antoine@oospores.net>
+	 * 
+	 * @param 	array	$array	The array to convert
+	 * @return	string
+	 */
+	static public function array2Attributes($array)
+	{
+		if(!is_array($array)) { return ''; }
+		
+		$string = '';
+		foreach($array as $key => $value)
+		{
+			$string.= $key . '="' . $value. '" ';
+		}
+		
+		return $string;
+	}
 }

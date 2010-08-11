@@ -256,7 +256,7 @@ abstract class Oos_DB_Common_Description extends Oos_BaseClass
 	/**
 	 * Get every tables
 	 * 
-	 * @version	1.0
+	 * @version	1.1
 	 * @since	0.1.4
  	 * @author	Antoine Berranger <antoine@oospores.net>
  	 * 
@@ -270,6 +270,7 @@ abstract class Oos_DB_Common_Description extends Oos_BaseClass
 		$tables_desc = array();
 		foreach($tables as $table_id => $table_data)
 		{	
+			if(!$table_data) { continue; }
 			$tables_desc[] = $this->getTable($table_id);
 		}
 		

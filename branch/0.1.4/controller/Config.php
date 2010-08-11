@@ -419,13 +419,22 @@ class Oos_Config extends Oos_BaseClass
 	/**
 	 * Returns the "model" dir for blocks
 	 * 
-	 * @version	1.0
+	 * @version	1.1
 	 * @since	0.1.4
  	 * @author	Antoine Berranger <antoine@oospores.net>
 	 * 
 	 * @return	string
 	 */
-	public function getBlockModelDir()	{ return $this->getModelDir() . DS . 'paragraphes'; }
+	public function getBlockModelDir()
+	{ 
+		$dir = $this->getModelDir() . DS . 'blocks'; 
+		if(file_exists($dir)) { return $dir; }
+		
+		$dir = $this->getModelDir() . DS . 'paragraphes'; 
+		if(file_exists($dir)) { return $dir; }
+		
+		return null;
+	}
 	
 	/**
 	 * Returns the "model" dir for pages

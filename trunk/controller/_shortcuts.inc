@@ -52,3 +52,22 @@ function oos_dump($o)
 	print_r($o);
 	print '</pre>';
 }
+
+/**
+ * Shortcut for Oos_HTML_Block_Form_Element::factory
+ * The first 2 parameters are mandatory, others are optionnal and depends on the input type
+ * 
+ * @version	1.0
+ * @since	0.1.5
+ * @author	Antoine Berranger <antoine@oospores.net>
+ * 
+ * @param 	string	$type		Type of the new input
+ * @param 	string	$name		Name (and id) of that input
+ * 
+ * @return	Oos_HTML_Block_Form_Element
+ */
+function input()
+{
+	$args = func_get_args();
+	return call_user_func_array(array('Oos_HTML_Block_Form_Element', 'factory'), $args);
+}

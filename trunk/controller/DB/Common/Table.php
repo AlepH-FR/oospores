@@ -133,12 +133,12 @@ class Oos_DB_Common_Table extends Oos_BaseClass
 	 */	
 	public function hasField($field) 
 	{
-		if($field == strtolower($this->code).'_ID') 
+		if($field == strtolower($this->_code).'_ID') 
 		{
 			return true;
 		} 
 		
-		foreach($this->fields as $table_field) 
+		foreach($this->_fields as $table_field) 
 		{
 			if($table_field->getCode() == $field) 
 			{

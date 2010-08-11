@@ -122,17 +122,21 @@ class Oos_DB_SQL_Description extends Oos_DB_Common_Description
 				if($rs)
 				while($column = mysql_fetch_assoc($rs)) 
 				{
+					if($column["Field"] == $table->getCode() . "_ID")
+					{
+						continue;
+					}
+					
 					// looking for this field
 					$hasField = $table->hasField($column["Field"]);
 
 					if($hasField) 
 					{ 
 						continue;
-					} 
-					
+					} 			
 					// if not found, it's going to the trash
 					else 
-					{
+					{	
 						$request = "
 							ALTER TABLE `".$table->getCode()."` 
 							DROP `".$column["Field"]."`

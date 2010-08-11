@@ -174,7 +174,7 @@ abstract class Oos_HTML_Block extends Oos_BaseClass
 	/**
 	 * Rendering block
 	 * 
-	 * @version	1.0
+	 * @version	1.2
 	 * @since	0.1.4
  	 * @author	Antoine Berranger <antoine@oospores.net>
  	 * 
@@ -185,7 +185,7 @@ abstract class Oos_HTML_Block extends Oos_BaseClass
  	 * 
  	 * @throws	Oos_HTML_Exception		Template of block not found
 	 */		
-	final public function doRender($tpl = null, $variables = null) 
+	public function doRender($tpl = null, $variables = null) 
 	{
 		global $controller;
 	
@@ -206,7 +206,7 @@ abstract class Oos_HTML_Block extends Oos_BaseClass
 		
 		// removing line breakers
 		$tpl = preg_replace("[\r\n]", $this->_config->getMarkup('_LINE_BREAK_'), $tpl);
-	
+		$tpl = preg_replace('/\n/', $this->_config->getMarkup('_LINE_BREAK_'), $tpl);
 		
 		// processing html
 		// ... sub-blocks
@@ -222,7 +222,8 @@ abstract class Oos_HTML_Block extends Oos_BaseClass
 			
 			$reg = '/' . $this->_config->getMarkup('block:'.strtoupper($match)) . '/';
 			$tpl = preg_replace($reg, $inner_html, $tpl);
-			$tpl = preg_replace("[\n]", $this->_config->getMarkup('_LINE_BREAK_'), $tpl);
+			$tpl = preg_replace("[\r\n]", $this->_config->getMarkup('_LINE_BREAK_'), $tpl);
+			$tpl = preg_replace('/\n/', $this->_config->getMarkup('_LINE_BREAK_'), $tpl);
 		}
 		
 		// ... conditionnal structures
@@ -249,8 +250,8 @@ abstract class Oos_HTML_Block extends Oos_BaseClass
 			$reg = '/' . $this->_config->getMarkup('if:'.$match) . '(.*?)' . $this->_config->getMarkup('endif:'.$match) . '/';
 			$tpl = preg_replace($reg, '', $tpl);
 		}
-		
-		/// ... internationalization
+
+		// ... internationalization
 		$reg = '/' . $this->_config->getMarkup('i18n:([\w\._]*)').  '/';
 		preg_match_all($reg, $tpl, $matches, PREG_SET_ORDER);
 		
@@ -266,7 +267,18 @@ abstract class Oos_HTML_Block extends Oos_BaseClass
 			
 			$wording = i18n($category, $key, $this->_account);
 			$tpl = str_replace($this->_config->getMarkup('i18n:' . $match), $wording, $tpl);
-			continue;
+		}
+		
+		// ... urls
+		$reg = '/' . $this->_config->getMarkup('url:([\w\._]*)').  '/';
+		preg_match_all($reg, $tpl, $matches, PREG_SET_ORDER);
+		
+		foreach($matches as $match) 
+		{
+			$match = $match[1];
+			
+			$url = url($match, null, null, $this->_account);
+			$tpl = str_replace($this->_config->getMarkup('url:' . $match), $url, $tpl);
 		}
 		
 		// processing variables
@@ -291,8 +303,15 @@ abstract class Oos_HTML_Block extends Oos_BaseClass
 			// loops
 			if(is_array($value)) 
 			{	
-				// looking for this loop
 				$reg = '/' . $this->_config->getMarkup('loop:'.$key) . '(.*?)' . $this->_config->getMarkup('endloop:'.$key) . '/';
+				
+				if(count($value) == 0)
+				{
+					$tpl = preg_replace($reg, '', $tpl);
+					continue;
+				}
+				
+				// looking for this loop
 				preg_match($reg, $tpl, $match);
 
 				if(!$match[1]) 
@@ -321,7 +340,7 @@ abstract class Oos_HTML_Block extends Oos_BaseClass
 		{
 			$block = '
 	<div id="block-' . $this->_template . '" class="oos_block">
-'.$block.'
+' . $block . '
 	</div>
 			';
 		}

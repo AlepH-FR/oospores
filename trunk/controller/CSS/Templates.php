@@ -128,7 +128,7 @@ class Oos_CSS_Templates extends Oos_BaseClass
 				continue;
 			}
 			
-			$source = $rep . DS . $file . DS . 'css'  .  DS  .  'index . css';
+			$source = $rep . DS . $file . DS . 'css'  .  DS  .  'index.css';
 			if(!file_exists($source))
 			{	
 				continue;

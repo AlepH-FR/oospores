@@ -309,7 +309,8 @@ class Oos_Controller extends Oos_BaseClass
 		$path = $config->getBlockModelDir() . DS;
 		
 		$system = Oos_System::factory();
-		return $system->findFileInDirectory($model, $path, array("php", "inc"));
+		$file = $system->findFileInDirectory($model, $path, array("php", "inc"));
+		return $file;
 	}
 	
 	/**
@@ -344,7 +345,7 @@ class Oos_Controller extends Oos_BaseClass
 	/**
 	 * Returns the block's template
 	 * 
-	 * @version	1.0
+	 * @version	1.1
 	 * @since	0.1.4
  	 * @author	Antoine Berranger <antoine@oospores.net>
  	 * 
@@ -357,20 +358,15 @@ class Oos_Controller extends Oos_BaseClass
 	 */
 	public function getTemplateBlock($template_name, $account) 
 	{
+		$system = Oos_System::factory();
 		$config = Oos_Config::getInstance($account);
-		$file_prefix 	= $config->getBlocksDir(). DS . strtolower($template_name);
-		$extensions 	= array("htm", "html", "tpl");
 		
-		foreach($extensions as $ext) 
+		$file = $system->findFileInDirectory($template_name, $config->getBlocksDir(), array("htm", "html", "tpl"));
+		if($file && file_exists($file))
 		{
-			$file = $file_prefix.".".$ext;
-			if(file_exists($file)) 
-			{
-				return file_get_contents($file);
-			}
+			return file_get_contents($file);
 		}
-		
-		return false;
+		return $file;
 	}
 	
 	/**

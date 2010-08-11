@@ -355,6 +355,7 @@ class Oos_XML_Collection_Sitemap extends Oos_XML_Collection
 	public function getBlocks($page_name)
 	{
 		$blocks = $this->_data['page'][$page_name]['block'];
+		if(!$blocks) { $blocks = array(); }
 		$modele = $this->_data['page'][$page_name]['modele'];
 		
 		if($modele)
@@ -362,7 +363,6 @@ class Oos_XML_Collection_Sitemap extends Oos_XML_Collection
 			$modele_blocks = $this->getModeleBlocks($modele);
 			$blocks = array_merge_recursive($blocks, $modele_blocks);
 		}
-		
 		return $blocks;
 	}
 	

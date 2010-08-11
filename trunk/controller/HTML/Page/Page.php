@@ -262,9 +262,7 @@ abstract class Oos_HTML_Page extends Oos_BaseClass
 			if(!$script) { continue; }
 			
 			$scripts.= '
-		<script charset="iso-8859-1" type="text/javascript" src="' . $script . '"></script>
-			';
-			$scripts = trim($scripts);
+		<script charset="iso-8859-1" type="text/javascript" src="' . $script . '"></script>';
 		}
 
 		return $scripts;	
@@ -472,10 +470,7 @@ abstract class Oos_HTML_Page extends Oos_BaseClass
 			}
 		}
 		
-		foreach($known_zones as $key => $boolean)
-		{
-			$innerBody = str_replace($this->getZonePattern($key), '', $innerBody);
-		}
+		$innerBody = preg_replace($this->_config->getMarkup($this->getZonePattern('[0-9]+')), '', $innerBody);
 		
 		return $innerBody;
 	}
